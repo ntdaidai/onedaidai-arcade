@@ -1,3 +1,9 @@
+# 🕹️ DAIDAI ARCADE
+
+这是 [onedaidai.com](https://onedaidai.com) 的源码，基于 [Minjia Hu 的 Retro Arcade](https://github.com/Minjia-Hu/retro-arcade) 修改。原项目采用 MIT 许可，许可文本保留在 [LICENSE](LICENSE)。部署由 Vercel 连接此仓库的 `main` 分支自动完成。
+
+下面保留原项目的说明与游戏介绍。
+
 # 🕹️ Retro Arcade
 
 **8 classic games in one browser cabinet. No framework, 35 KB gzipped, fully tested.**
@@ -127,3 +133,4 @@ Conventions and the testing rules are in [CONTRIBUTING.md](CONTRIBUTING.md). The
 ## License
 
 [MIT](LICENSE)
+

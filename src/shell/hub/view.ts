@@ -25,8 +25,8 @@ export function hubHtml(m: HubModel): string {
     <div class="hub">
       <header class="marquee">
         <div class="marquee-bar marquee-bar-top"></div>
-        <h1 class="hub-title">GAME CENTER</h1>
-        <p class="hub-sub">THE SUNSET ARCADE — OPEN 24/7</p>
+        <h1 class="hub-title">DAIDAI ARCADE</h1>
+        <p class="hub-sub">8 GAMES · ONE MORE ROUND</p>
         <div class="marquee-bar marquee-bar-bottom"></div>
       </header>
 
@@ -66,3 +66,4 @@ export function hubHtml(m: HubModel): string {
       </p>
     </div>`;
 }
+

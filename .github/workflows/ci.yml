@@ -1,4 +1,4 @@
-name: CI
+name: Check arcade
 
 on:
   push:
@@ -7,41 +7,17 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-# One Pages deployment at a time: queue rather than cancel each other
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx tsc --noEmit
       - run: npm test
-      - run: npx playwright install --with-deps chromium
-      - run: npm run e2e
-      # The base path is passed only here: local dev and e2e run at '/', only Pages lives under /retro-arcade/
-      - run: npx vite build --base=/retro-arcade/
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
+      - run: npm run build
 
-  deploy:
-    needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4

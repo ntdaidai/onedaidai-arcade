@@ -141,7 +141,7 @@ export interface CardModel {
   hasRecord: boolean;
 }
 
-export const REPO_URL = 'https://github.com/Minjia-Hu/retro-arcade';
+export const REPO_URL = 'https://github.com/ntdaidai/onedaidai-arcade';
 
 /**
  * Each footer part has one job: games is decoration, muted is a toggle (sound can be turned off
@@ -229,8 +229,9 @@ export function buildHubModel(storage: ArcadeStorage, now: Date): HubModel {
     footer: {
       games: `${GAMES.length} GAMES LOADED`,
       muted,
-      copyright: '© 2026 SUNSET ARCADE',
+      copyright: '© 2026 DAIDAI ARCADE',
       repoUrl: REPO_URL,
     },
   };
 }
+

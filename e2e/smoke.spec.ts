@@ -400,6 +400,7 @@ test('the hub footer SOUND toggle shares state with the in-game SND button', asy
 
   // The exit link: points at the repo, new tab, no opener leak
   const link = page.locator('.hub-link');
-  await expect(link).toHaveAttribute('href', /github\.com\/Minjia-Hu\/retro-arcade/);
+  await expect(link).toHaveAttribute('href', /github\.com\/ntdaidai\/onedaidai-arcade/);
   await expect(link).toHaveAttribute('rel', 'noopener');
 });
+
