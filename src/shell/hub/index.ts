@@ -10,7 +10,7 @@ export function renderHub(root: HTMLElement, storage: ArcadeStorage, audio: Audi
   const sound = root.querySelector<HTMLButtonElement>('[data-act="sound"]');
   sound?.addEventListener('click', () => {
     const muted = audio.toggleMuted();
-    sound.textContent = `SOUND ${muted ? 'OFF' : 'ON'}`;
+    sound.textContent = `声音${muted ? '关' : '开'}`;
     sound.setAttribute('aria-pressed', String(muted));
     audio.play('click'); // play() is a no-op while muted
     sound.blur();

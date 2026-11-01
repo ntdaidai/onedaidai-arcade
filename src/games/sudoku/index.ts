@@ -70,12 +70,12 @@ export function createSudoku(): Game {
   function reportSolved(): void {
     if (!state) return;
     ctx?.overlay({
-      title: 'SOLVED!',
+      title: '完成数独！',
       tone: 'win',
       // The mockup also shows time and mistakes, but SudokuState has no source for either; don't fake them
       lines: [DIFF_LABEL[state.diff.id]],
-      actions: [{ label: '▶ NEW PUZZLE', onPress: backToMenu }],
-      hints: ['SPACE / TAP FOR A NEW PUZZLE'],
+      actions: [{ label: '▶ 新题目', onPress: backToMenu }],
+      hints: ['空格键或点击开始新题'],
     });
   }
 
@@ -87,15 +87,15 @@ export function createSudoku(): Game {
     padButtons(
       row('digits'),
       [1, 2, 3, 4, 5, 6, 7, 8, 9].map((d) => ({
-        id: String(d), label: String(d), aria: `Enter ${d}`, variant: 'pad-btn-digit',
+        id: String(d), label: String(d), aria: `填入 ${d}`, variant: 'pad-btn-digit',
       })),
       (id) => applyDigit(Number(id)),
     );
 
     padButtons(row('fns'), [
-      { id: 'erase', label: '⌫ ERASE', aria: 'Erase', variant: 'pad-btn-wide' },
-      { id: 'notes', label: '✎ NOTES', aria: 'Notes mode', variant: 'pad-btn-wide' },
-      { id: 'check', label: '⚑ CHECK', aria: 'Highlight conflicts', variant: 'pad-btn-wide' },
+      { id: 'erase', label: '⌫ 清除', aria: '清除', variant: 'pad-btn-wide' },
+      { id: 'notes', label: '✎ 笔记', aria: '笔记模式', variant: 'pad-btn-wide' },
+      { id: 'check', label: '⚑ 检查', aria: '标出冲突', variant: 'pad-btn-wide' },
     ], (id) => {
       // eraseSelected has its own frozen guard; this one is for the notes/check toggles
       if (frozen()) return;
@@ -248,12 +248,12 @@ export function createSudoku(): Game {
       id: 'sudoku',
       name: 'Sudoku',
       icon: '✏️',
-      displayName: 'SUDOKU',
-      hints: ['TAP CELL', 'THEN A NUMBER'],
+      displayName: '数独',
+      hints: ['点击格子', '再选择数字'],
       screen: 'paper',
       pad: true,
       pausable: false, // turn-based, pausing is meaningless
-      tools: [{ id: 'menu', label: '☰', aria: 'Difficulty menu' }],
+      tools: [{ id: 'menu', label: '☰', aria: '难度菜单' }],
     },
 
     mount(container: HTMLElement, context: GameContext): void {

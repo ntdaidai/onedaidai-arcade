@@ -19,12 +19,12 @@ const pieceGlow = (type: number): string => SCREEN.glow[PIECE_TONES[type % PIECE
 type PadId = 'left' | 'right' | 'rotate' | 'soft' | 'hard' | 'hold';
 
 const PAD: { id: PadId; label: string; aria: string }[] = [
-  { id: 'left', label: '◀', aria: 'Move left' },
-  { id: 'right', label: '▶', aria: 'Move right' },
-  { id: 'rotate', label: '⟳', aria: 'Rotate' },
-  { id: 'soft', label: '▼', aria: 'Soft drop' },
-  { id: 'hard', label: '⤓', aria: 'Hard drop' },
-  { id: 'hold', label: '⇄', aria: 'Hold' },
+  { id: 'left', label: '◀', aria: '左移' },
+  { id: 'right', label: '▶', aria: '右移' },
+  { id: 'rotate', label: '⟳', aria: '旋转' },
+  { id: 'soft', label: '▼', aria: '加速下落' },
+  { id: 'hard', label: '⤓', aria: '直接落下' },
+  { id: 'hold', label: '⇄', aria: '暂存方块' },
 ];
 
 
@@ -62,11 +62,11 @@ export function createTetris(): Game {
   function reportOver(): void {
     const record = state.score > bestAtStart;
     ctx?.overlay({
-      title: record ? 'NEW HIGH SCORE' : 'GAME OVER',
+      title: record ? '新纪录！' : '游戏结束',
       tone: record ? 'record' : 'lose',
-      lines: [`SCORE ${padScore(state.score, 6)}`, `LINES ${padScore(state.lines, 3)}`, `BEST ${padScore(best, 6)}`],
-      actions: [{ label: '▶ RETRY', onPress: retry }],
-      hints: ['SPACE / TAP TO RETRY'],
+      lines: [`得分 ${padScore(state.score, 6)}`, `消除行数 ${padScore(state.lines, 3)}`, `最高分 ${padScore(best, 6)}`],
+      actions: [{ label: '▶ 再玩一次', onPress: retry }],
+      hints: ['空格键或点击重试'],
     });
   }
 
@@ -209,11 +209,11 @@ export function createTetris(): Game {
 
   function buildSide(host: HTMLElement): void {
     host.innerHTML = `
-      <div class="side-card"><span class="side-label">NEXT</span><span class="side-piece" data-ref="next"></span></div>
-      <div class="side-card"><span class="side-label">HOLD</span><span class="side-piece" data-ref="hold"></span></div>
-      <div class="side-card"><span class="side-label">SCORE</span><span class="side-value" data-ref="score">000000</span></div>
-      <div class="side-card"><span class="side-label">LEVEL</span><span class="side-value side-value-accent" data-ref="level">01</span></div>
-      <div class="side-card"><span class="side-label">BEST</span><span class="side-value side-value-dim" data-ref="best">000000</span></div>`;
+      <div class="side-card"><span class="side-label">下一个</span><span class="side-piece" data-ref="next"></span></div>
+      <div class="side-card"><span class="side-label">暂存</span><span class="side-piece" data-ref="hold"></span></div>
+      <div class="side-card"><span class="side-label">得分</span><span class="side-value" data-ref="score">000000</span></div>
+      <div class="side-card"><span class="side-label">等级</span><span class="side-value side-value-accent" data-ref="level">01</span></div>
+      <div class="side-card"><span class="side-label">最高分</span><span class="side-value side-value-dim" data-ref="best">000000</span></div>`;
     const q = (ref: string) => host.querySelector<HTMLElement>(`[data-ref="${ref}"]`)!;
     side = { next: q('next'), hold: q('hold'), score: q('score'), level: q('level'), best: q('best') };
     shownNext = -1;
@@ -269,7 +269,7 @@ export function createTetris(): Game {
       g.font = `700 14px ${SCREEN.mono}`;
       g.textAlign = 'center';
       g.textBaseline = 'middle';
-      g.fillText('TAP / ENTER TO START', W / 2, H / 2);
+      g.fillText('点击或按回车开始', W / 2, H / 2);
       g.textAlign = 'left';
       g.textBaseline = 'alphabetic';
     }
@@ -282,8 +282,8 @@ export function createTetris(): Game {
       id: 'tetris',
       name: 'Tetris',
       icon: '🧱',
-      displayName: 'TETRIS',
-      hints: ['←→ MOVE', '↑ ROTATE', '↓ DROP', 'SPACE HARD DROP', 'C HOLD'],
+      displayName: '俄罗斯方块',
+      hints: ['←→ 移动', '↑ 旋转', '↓ 加速下落', '空格键直接落下', 'C 暂存'],
       screen: 'dark',
       side: true,
       pad: true,

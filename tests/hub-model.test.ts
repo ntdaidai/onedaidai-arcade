@@ -7,9 +7,9 @@ import { buildDaily, CHALLENGES } from '../src/shell/hub/model';
 import { buildFeatured, buildCards, buildHubModel, REPO_URL } from '../src/shell/hub/model';
 
 describe('registry displayName', () => {
-  it('all eight games have an upper-case English display name', () => {
+  it('all eight games have Chinese display names', () => {
     expect(GAMES.map((g) => g.meta.displayName)).toEqual([
-      'SNAKE', 'TETRIS', 'BREAKOUT', 'FLAPPY', '2048', 'MINES', 'SUDOKU', 'GOMOKU',
+      '贪吃蛇', '俄罗斯方块', '打砖块', '飞翔小鸟', '2048', '扫雷', '数独', '五子棋',
     ]);
   });
 });
@@ -32,28 +32,28 @@ describe('padScore', () => {
 
 describe('relativeTime', () => {
   const M = 60_000, H = 3_600_000, D = 86_400_000;
-  it('under a minute is JUST NOW', () => {
-    expect(relativeTime(1000, 1000)).toBe('JUST NOW');
-    expect(relativeTime(0, 59_999)).toBe('JUST NOW');
+  it('under a minute is 刚刚', () => {
+    expect(relativeTime(1000, 1000)).toBe('刚刚');
+    expect(relativeTime(0, 59_999)).toBe('刚刚');
   });
   it('under an hour counts minutes', () => {
-    expect(relativeTime(0, M)).toBe('1M AGO');
-    expect(relativeTime(0, 59 * M)).toBe('59M AGO');
+    expect(relativeTime(0, M)).toBe('1 分钟前');
+    expect(relativeTime(0, 59 * M)).toBe('59 分钟前');
   });
   it('under a day counts hours', () => {
-    expect(relativeTime(0, H)).toBe('1H AGO');
-    expect(relativeTime(0, 2 * H)).toBe('2H AGO');
-    expect(relativeTime(0, 23 * H)).toBe('23H AGO');
+    expect(relativeTime(0, H)).toBe('1 小时前');
+    expect(relativeTime(0, 2 * H)).toBe('2 小时前');
+    expect(relativeTime(0, 23 * H)).toBe('23 小时前');
   });
   it('under a week counts days', () => {
-    expect(relativeTime(0, D)).toBe('1D AGO');
-    expect(relativeTime(0, 6 * D)).toBe('6D AGO');
+    expect(relativeTime(0, D)).toBe('1 天前');
+    expect(relativeTime(0, 6 * D)).toBe('6 天前');
   });
-  it('over a week is A WHILE AGO', () => {
-    expect(relativeTime(0, 7 * D)).toBe('A WHILE AGO');
+  it('over a week is 很久以前', () => {
+    expect(relativeTime(0, 7 * D)).toBe('很久以前');
   });
   it('a future timestamp never goes negative', () => {
-    expect(relativeTime(5000, 0)).toBe('JUST NOW');
+    expect(relativeTime(5000, 0)).toBe('刚刚');
   });
 });
 
@@ -83,12 +83,12 @@ describe('buildHall', () => {
     const rows = buildHall(freshStorage());
     expect(rows).toHaveLength(3);
     expect(rows.every((r) => r.tone === 'faint')).toBe(true);
-    expect(rows[0]).toEqual({ rank: '1', name: '— EMPTY —', score: '······', tone: 'faint' });
+    expect(rows[0]).toEqual({ rank: '1', name: '— 暂无记录 —', score: '······', tone: 'faint' });
   });
 
   it('top three by score, padded to three rows', () => {
     const rows = buildHall(freshStorage({ 'best.snake': 3840, 'best.tetris': 12750 }));
-    expect(rows.map((r) => r.name)).toEqual(['TETRIS', 'SNAKE', '— EMPTY —']);
+    expect(rows.map((r) => r.name)).toEqual(['俄罗斯方块', '贪吃蛇', '— 暂无记录 —']);
     expect(rows.map((r) => r.score)).toEqual(['012750', '003840', '······']);
     expect(rows[2].tone).toBe('faint');
   });
@@ -103,19 +103,19 @@ describe('buildHall', () => {
       'best.snake': 10, 'best.tetris': 20, 'best.breakout': 30, 'best.flappy': 40,
     }));
     expect(rows).toHaveLength(3);
-    expect(rows.map((r) => r.name)).toEqual(['FLAPPY', 'BREAKOUT', 'TETRIS']);
+    expect(rows.map((r) => r.name)).toEqual(['飞翔小鸟', '打砖块', '俄罗斯方块']);
   });
 
   it('ties follow registry order', () => {
     const rows = buildHall(freshStorage({ 'best.tetris': 500, 'best.snake': 500 }));
-    expect(rows.map((r) => r.name)).toEqual(['SNAKE', 'TETRIS', '— EMPTY —']);
+    expect(rows.map((r) => r.name)).toEqual(['贪吃蛇', '俄罗斯方块', '— 暂无记录 —']);
   });
 
   it('ignores junk data and zero scores', () => {
     const rows = buildHall(freshStorage({
       'best.snake': 'oops', 'best.tetris': null, 'best.breakout': 0, 'best.flappy': 47,
     }));
-    expect(rows.map((r) => r.name)).toEqual(['FLAPPY', '— EMPTY —', '— EMPTY —']);
+    expect(rows.map((r) => r.name)).toEqual(['飞翔小鸟', '— 暂无记录 —', '— 暂无记录 —']);
   });
 });
 
@@ -123,7 +123,7 @@ describe('the zero-score rule', () => {
   // Cards and the Hall of Fame must agree on what counts as a record
   it('zero counts as no record in both places', () => {
     const s = freshStorage({ 'best.snake': 0 });
-    expect(buildCards(s)[0]).toMatchObject({ pill: 'NO RECORD', hasRecord: false });
+    expect(buildCards(s)[0]).toMatchObject({ pill: '暂无记录', hasRecord: false });
     expect(buildHall(s).every((r) => r.tone === 'faint')).toBe(true);
   });
 });
@@ -142,9 +142,9 @@ describe('buildDaily', () => {
     expect(a).toEqual(b);
   });
 
-  it('the date label is weekday abbreviation + two-digit day', () => {
+  it('the date label uses a Chinese month, day and weekday', () => {
     // 2026-09-05 is a Saturday
-    expect(buildDaily(new Date(2026, 8, 5)).dateLabel).toBe('DAILY CHALLENGE · SAT 05');
+    expect(buildDaily(new Date(2026, 8, 5)).dateLabel).toBe('今日推荐 · 9月5日 周六');
   });
 
   it('the chosen game id is always in the registry', () => {
@@ -160,8 +160,8 @@ describe('buildDaily', () => {
     expect(ids.size).toBeGreaterThan(1);
   });
 
-  it('Minesweeper\'s copy matches the mockup', () => {
-    expect(CHALLENGES.minesweeper).toEqual({ prefix: 'CLEAR', suffix: 'IN UNDER 60 SECONDS' });
+  it('Minesweeper has Chinese challenge copy', () => {
+    expect(CHALLENGES.minesweeper).toEqual({ prefix: '挑战', suffix: '：60 秒内完成' });
   });
 });
 
@@ -173,26 +173,26 @@ describe('buildFeatured', () => {
     const s = freshStorage({ lastPlayed: { id: 'tetris', at }, 'best.tetris': 12750 });
     expect(buildFeatured(s, now)).toEqual({
       mode: 'continue',
-      label: '◆ CONTINUE PLAYING ◆',
-      button: 'PRESS START',
+      label: '◆ 接着玩 ◆',
+      button: '继续游戏',
       id: 'tetris',
-      name: 'TETRIS',
+      name: '俄罗斯方块',
       accent: 'magenta',
-      meta: 'YOUR BEST 012750 · LAST PLAYED 2H AGO',
+      meta: '你的最高分 012750 · 上次游玩：2 小时前',
     });
   });
 
   it('played but no record degrades the meta line', () => {
     const s = freshStorage({ lastPlayed: { id: 'sudoku', at: now.getTime() } });
-    expect(buildFeatured(s, now).meta).toBe('NO RECORD YET · LAST PLAYED JUST NOW');
+    expect(buildFeatured(s, now).meta).toBe('还没有记录 · 上次游玩：刚刚');
   });
 
   it('never played enters newcomer mode', () => {
     const f = buildFeatured(freshStorage(), now);
     expect(f.mode).toBe('newcomer');
-    expect(f.label).toBe('◆ NEW CHALLENGER? ◆');
-    expect(f.button).toBe('INSERT COIN');
-    expect(f.meta).toBe('NO RECORD YET · BE THE FIRST');
+    expect(f.label).toBe('◆ 来玩一局？◆');
+    expect(f.button).toBe('开始游戏');
+    expect(f.meta).toBe('还没有记录 · 等你来挑战');
     expect(GAMES.some((g) => g.meta.id === f.id)).toBe(true);
   });
 
@@ -218,17 +218,17 @@ describe('buildCards', () => {
     ]);
   });
 
-  it('NO RECORD without a score, a zero-padded score with one', () => {
+  it('shows a Chinese no-record label or a padded best score', () => {
     const cards = buildCards(freshStorage({ 'best.snake': 3840 }));
-    expect(cards[0]).toMatchObject({ id: 'snake', name: 'SNAKE', pill: 'BEST 003840', hasRecord: true });
-    expect(cards[6]).toMatchObject({ id: 'sudoku', pill: 'NO RECORD', hasRecord: false });
+    expect(cards[0]).toMatchObject({ id: 'snake', name: '贪吃蛇', pill: '最高分 003840', hasRecord: true });
+    expect(cards[6]).toMatchObject({ id: 'sudoku', pill: '暂无记录', hasRecord: false });
   });
 });
 
 describe('buildHubModel', () => {
   it('the footer reflects game count and mute state, and carries the repo URL', () => {
     const on = buildHubModel(freshStorage(), new Date(2026, 8, 5));
-    expect(on.footer.games).toBe('8 GAMES LOADED');
+    expect(on.footer.games).toBe('8 款游戏已就绪');
     expect(on.footer.muted).toBe(false);
     expect(on.footer.repoUrl).toBe(REPO_URL);
     const off = buildHubModel(freshStorage({ muted: true }), new Date(2026, 8, 5));
@@ -240,6 +240,6 @@ describe('buildHubModel', () => {
     expect(m.hall).toHaveLength(3);
     expect(m.cards).toHaveLength(8);
     expect(m.featured.mode).toBe('newcomer');
-    expect(m.daily.dateLabel).toContain('DAILY CHALLENGE');
+    expect(m.daily.dateLabel).toContain('今日推荐');
   });
 });

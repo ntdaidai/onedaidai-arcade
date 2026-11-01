@@ -230,8 +230,8 @@ export class GameFrame {
     // cab-btn rather than the old .btn — the .btn rule no longer exists since the cabinet styles landed
     root.innerHTML = `
       <div class="frame-error">
-        <p>💥 GAME ERROR · something went wrong</p>
-        <button class="cab-btn" data-act="home">BACK TO HUB</button>
+        <p>💥 游戏加载失败，请重试</p>
+        <button class="cab-btn" data-act="home">返回游戏厅</button>
       </div>`;
     root.querySelector('[data-act="home"]')!.addEventListener('click', () => {
       location.hash = '#/';

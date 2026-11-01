@@ -5,5 +5,5 @@ export function padScore(n: number, width: number): string {
 
 /** Difficulty id → label for the top-bar pill. The `name` in logic is Chinese; the top bar uses English per the mockups */
 export const DIFF_LABEL: Record<'easy' | 'medium' | 'hard', string> = {
-  easy: 'EASY', medium: 'MEDIUM', hard: 'HARD',
+  easy: '简单', medium: '普通', hard: '困难',
 };

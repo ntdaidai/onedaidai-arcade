@@ -32,14 +32,14 @@ for (const scenario of wins) {
       await place(page, 4 + i * scenario.dx, 7 + i * scenario.dy);
       if (!scenario.white && i < 4) await place(page, i * 2, 13);
     }
-    const result = scenario.white ? 'WHITE WINS' : 'BLACK WINS';
+    const result = scenario.white ? '白棋获胜' : '黑棋获胜';
     await expect(page.locator('.settle-title')).toHaveText(result);
     const finished = await boardImage(page);
     expect(finished).not.toBe(empty);
     await page.screenshot({ path: testInfo.outputPath('result.png'), fullPage: true });
 
     // Explicit buttons must work immediately, without the board-tap debounce.
-    await page.locator('.settle').getByRole('button', { name: 'VIEW BOARD', exact: true }).click();
+    await page.locator('.settle').getByRole('button', { name: '查看棋盘', exact: true }).click();
     await expect(page.locator('.settle-card')).toBeHidden();
     await expect(page.locator('.screen')).not.toHaveClass(/is-settled/);
     await expect(page.locator('[data-ref="result"]')).toHaveText(result);
@@ -66,8 +66,8 @@ for (const scenario of wins) {
 
     // Opening the menu must not discard the final board; keyboard can return to it.
     await page.getByRole('button', { name: 'Mode menu' }).click();
-    await expect(page.locator('.settle-title')).toHaveText('GOMOKU');
-    const review = page.locator('.settle').getByRole('button', { name: 'VIEW BOARD', exact: true });
+    await expect(page.locator('.settle-title')).toHaveText('五子棋');
+    const review = page.locator('.settle').getByRole('button', { name: '查看棋盘', exact: true });
     await review.focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('.settle-card')).toBeHidden();
@@ -75,7 +75,7 @@ for (const scenario of wins) {
 
     await page.locator('[data-ref="new-game"]').focus();
     await page.keyboard.press('Space');
-    await expect(page.locator('.settle-title')).toHaveText('GOMOKU');
+    await expect(page.locator('.settle-title')).toHaveText('五子棋');
     await page.getByRole('button', { name: '2 PLAYERS', exact: true }).click();
     await expect(page.locator('[data-ref="result"]')).toBeHidden();
     await expect(page.locator('[data-ref="black"]')).toBeVisible();
@@ -102,11 +102,11 @@ test('GOMOKU draw can be reviewed and the result menu can return to the board', 
     await place(page, ...black[i]);
     if (i < white.length) await place(page, ...white[i]);
   }
-  await expect(page.locator('.settle-title')).toHaveText('DRAW');
+  await expect(page.locator('.settle-title')).toHaveText('平局');
   const finished = await boardImage(page);
-  await page.locator('.settle').getByRole('button', { name: '▶ NEW GAME', exact: true }).click();
-  await page.locator('.settle').getByRole('button', { name: 'VIEW BOARD', exact: true }).click();
-  await expect(page.locator('[data-ref="result"]')).toHaveText('DRAW');
+  await page.locator('.settle').getByRole('button', { name: '▶ 新游戏', exact: true }).click();
+  await page.locator('.settle').getByRole('button', { name: '查看棋盘', exact: true }).click();
+  await expect(page.locator('[data-ref="result"]')).toHaveText('平局');
   await expect(page.locator('.cab-hints')).not.toContainText('WINNING');
   expect(await boardImage(page)).toBe(finished);
 });

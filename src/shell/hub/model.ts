@@ -15,13 +15,13 @@ export function padScore(n: number): string {
 export function relativeTime(at: number, now: number): string {
   const ms = Math.max(0, now - at);
   const min = Math.floor(ms / 60_000);
-  if (min < 1) return 'JUST NOW';
-  if (min < 60) return `${min}M AGO`;
+  if (min < 1) return '刚刚';
+  if (min < 60) return `${min} 分钟前`;
   const hours = Math.floor(min / 60);
-  if (hours < 24) return `${hours}H AGO`;
+  if (hours < 24) return `${hours} 小时前`;
   const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}D AGO`;
-  return 'A WHILE AGO';
+  if (days < 7) return `${days} 天前`;
+  return '很久以前';
 }
 
 /** Local date key, the seed for the daily content */
@@ -80,7 +80,7 @@ export function buildHall(storage: ArcadeStorage): HallRow[] {
   while (rows.length < 3) {
     rows.push({
       rank: String(rows.length + 1),
-      name: '— EMPTY —',
+      name: '— 暂无记录 —',
       score: '······',
       tone: 'faint',
     });
@@ -98,24 +98,23 @@ export interface DailyModel {
 
 /** Rendered as "prefix GAME suffix"; suffix may be empty */
 export const CHALLENGES: Record<string, { prefix: string; suffix: string }> = {
-  snake: { prefix: 'SURVIVE', suffix: 'FOR 20 APPLES STRAIGHT' },
-  tetris: { prefix: 'CLEAR 10 LINES IN', suffix: '' },
-  breakout: { prefix: 'BREAK 60 BRICKS IN', suffix: 'ON ONE LIFE' },
-  flappy: { prefix: 'PASS 15 PIPES IN', suffix: 'WITHOUT A SCRATCH' },
-  g2048: { prefix: 'REACH THE 512 TILE IN', suffix: '' },
-  minesweeper: { prefix: 'CLEAR', suffix: 'IN UNDER 60 SECONDS' },
-  sudoku: { prefix: 'FINISH', suffix: 'WITH ZERO MISTAKES' },
-  gomoku: { prefix: 'BEAT THE AI AT', suffix: 'AS BLACK' },
+  snake: { prefix: '挑战', suffix: '：连续吃到 20 个苹果' },
+  tetris: { prefix: '挑战', suffix: '：消除 10 行' },
+  breakout: { prefix: '挑战', suffix: '：一条命打碎 60 块砖' },
+  flappy: { prefix: '挑战', suffix: '：连续飞过 15 根水管' },
+  g2048: { prefix: '挑战', suffix: '：合出 512' },
+  minesweeper: { prefix: '挑战', suffix: '：60 秒内完成' },
+  sudoku: { prefix: '挑战', suffix: '：一次填对' },
+  gomoku: { prefix: '挑战', suffix: '：执黑战胜电脑' },
 };
 
-const WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
 
 export function buildDaily(now: Date): DailyModel {
   const entry = GAMES[hashDate(dateKey(now)) % GAMES.length];
-  const copy = CHALLENGES[entry.meta.id] ?? { prefix: 'PLAY', suffix: 'TODAY' };
-  const day = String(now.getDate()).padStart(2, '0');
+  const copy = CHALLENGES[entry.meta.id] ?? { prefix: '今天玩', suffix: '' };
   return {
-    dateLabel: `DAILY CHALLENGE · ${WEEKDAYS[now.getDay()]} ${day}`,
+    dateLabel: `今日推荐 · ${now.getMonth() + 1}月${now.getDate()}日 周${WEEKDAYS[now.getDay()]}`,
     prefix: copy.prefix,
     name: label(entry),
     suffix: copy.suffix,
@@ -181,15 +180,15 @@ export function buildFeatured(storage: ArcadeStorage, now: Date): FeaturedModel 
     const index = GAMES.findIndex((g) => g.meta.id === last.id);
     const entry = GAMES[index];
     const best = bestOf(storage, entry.meta.id);
-    const bestText = best === null ? 'NO RECORD YET' : `YOUR BEST ${padScore(best)}`;
+    const bestText = best === null ? '还没有记录' : `你的最高分 ${padScore(best)}`;
     return {
       mode: 'continue',
-      label: '◆ CONTINUE PLAYING ◆',
-      button: 'PRESS START',
+      label: '◆ 接着玩 ◆',
+      button: '继续游戏',
       id: entry.meta.id,
       name: label(entry),
       accent: accentAt(index),
-      meta: `${bestText} · LAST PLAYED ${relativeTime(last.at, now.getTime())}`,
+      meta: `${bestText} · 上次游玩：${relativeTime(last.at, now.getTime())}`,
     };
   }
   // With no history, pick one by date: stable within a day, different across days
@@ -197,12 +196,12 @@ export function buildFeatured(storage: ArcadeStorage, now: Date): FeaturedModel 
   const entry = GAMES[index];
   return {
     mode: 'newcomer',
-    label: '◆ NEW CHALLENGER? ◆',
-    button: 'INSERT COIN',
+    label: '◆ 来玩一局？◆',
+    button: '开始游戏',
     id: entry.meta.id,
     name: label(entry),
     accent: accentAt(index),
-    meta: 'NO RECORD YET · BE THE FIRST',
+    meta: '还没有记录 · 等你来挑战',
   };
 }
 
@@ -213,7 +212,7 @@ export function buildCards(storage: ArcadeStorage): CardModel[] {
       id: entry.meta.id,
       name: label(entry),
       accent: accentAt(index),
-      pill: best === null ? 'NO RECORD' : `BEST ${padScore(best)}`,
+      pill: best === null ? '暂无记录' : `最高分 ${padScore(best)}`,
       hasRecord: best !== null,
     };
   });
@@ -227,11 +226,10 @@ export function buildHubModel(storage: ArcadeStorage, now: Date): HubModel {
     hall: buildHall(storage),
     cards: buildCards(storage),
     footer: {
-      games: `${GAMES.length} GAMES LOADED`,
+      games: `${GAMES.length} 款游戏已就绪`,
       muted,
-      copyright: '© 2026 DAIDAI ARCADE',
+      copyright: '© 2026 呆呆游戏厅',
       repoUrl: REPO_URL,
     },
   };
 }
-

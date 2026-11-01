@@ -14,7 +14,8 @@
   --gold: #e67700;
   --well: #efe5d3;
   --screen-ground: #1a1410; /* mirrors SCREEN.ground in src/core/theme.ts; change both together */
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --mono: Consolas, ui-monospace, monospace;
+  --ui: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', system-ui, sans-serif;
   --focus-ring: 0 0 0 4px rgba(232, 89, 12, .35);
 }
 
@@ -23,7 +24,7 @@ html, body { min-height: 100%; }
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--ui);
   -webkit-tap-highlight-color: transparent;
 }
 #app { min-height: 100vh; display: flex; flex-direction: column; }
@@ -368,6 +369,15 @@ button { font-family: inherit; cursor: pointer; }
 .settle-action-secondary:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
 /* Must be explicit: .settle-action:focus-visible is more specific, and a focused secondary button would otherwise jump to the primary look */
 .settle-action-secondary:focus-visible { outline: none; box-shadow: 3px 3px 0 var(--ink), var(--focus-ring); }
+
+/* Chinese display type keeps the arcade weight without downloading web fonts. */
+.hub-title, .panel-label, .continue-name, .btn-start, .grid-heading,
+.card-name, .cab-name, .head-label, .side-label, .settle-title, .settle-action {
+  font-family: var(--ui);
+  font-weight: 800;
+}
+.hub-title { letter-spacing: .12em; }
+.hub-sub, .continue-meta, .btn-accept, .hub-footer, .cab-hints { letter-spacing: 1px; }
 .settle-quit {
   font-size: 12px; font-weight: 700; letter-spacing: 2px;
   background: none; border: none; color: var(--dim); text-decoration: underline;

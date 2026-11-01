@@ -84,11 +84,11 @@ export function createBreakout(): Game {
       ctx?.audio.play('over');
       const record = state.score > bestAtStart;
       ctx?.overlay({
-        title: record ? 'NEW HIGH SCORE' : 'GAME OVER',
+        title: record ? '新纪录！' : '游戏结束',
         tone: record ? 'record' : 'lose',
-        lines: [`SCORE ${padScore(state.score, 6)}`, `LEVEL ${padScore(state.level, 2)}`, `BEST ${padScore(best, 6)}`],
-        actions: [{ label: '▶ RETRY', onPress: retry }],
-        hints: ['SPACE / TAP TO RETRY'],
+        lines: [`得分 ${padScore(state.score, 6)}`, `等级 ${padScore(state.level, 2)}`, `最高分 ${padScore(best, 6)}`],
+        actions: [{ label: '▶ 再玩一次', onPress: retry }],
+        hints: ['空格键或点击重试'],
       });
     } else if (ev.lost) {
       ctx?.audio.play('hit');
@@ -106,7 +106,7 @@ export function createBreakout(): Game {
     g.font = `700 15px ${SCREEN.mono}`;
     g.textAlign = 'left';
     g.fillStyle = SCREEN.gold;
-    g.fillText(`SCORE ${padScore(state.score, 4)}`, 16, 30);
+    g.fillText(`得分 ${padScore(state.score, 4)}`, 16, 30);
     g.textAlign = 'right';
     g.fillStyle = SCREEN.pink;
     const lives = Math.max(0, Math.min(3, state.lives));
@@ -115,7 +115,7 @@ export function createBreakout(): Game {
     g.textAlign = 'center';
     g.font = `12px ${SCREEN.mono}`;
     g.fillStyle = 'rgba(255, 250, 240, .45)';
-    g.fillText(`LEVEL ${state.level}`, L.W / 2, 30);
+    g.fillText(`等级 ${state.level}`, L.W / 2, 30);
 
     // Bricks: colour by row, bevel + same-colour glow
     for (const b of state.bricks) {
@@ -160,7 +160,7 @@ export function createBreakout(): Game {
       g.textAlign = 'center';
       g.font = `700 14px ${SCREEN.mono}`;
       g.fillStyle = SCREEN.gold;
-      g.fillText('TAP / SPACE TO LAUNCH', L.W / 2, L.H / 2 + 40);
+      g.fillText('点击或按空格发球', L.W / 2, L.H / 2 + 40);
     }
     g.textAlign = 'left';
   }
@@ -170,8 +170,8 @@ export function createBreakout(): Game {
       id: 'breakout',
       name: 'Breakout',
       icon: '🕹️',
-      displayName: 'BREAKOUT',
-      hints: ['←→ / MOUSE MOVE', 'SPACE LAUNCH'],
+      displayName: '打砖块',
+      hints: ['←→ / 鼠标移动挡板', '空格键发球'],
       screen: 'dark',
     },
 

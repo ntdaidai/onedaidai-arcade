@@ -47,9 +47,9 @@ export function createMinesweeper(): Game {
 
   function buildHead(host: HTMLElement): void {
     host.innerHTML = `
-      <div class="head-card" data-ref="flags" aria-label="Mines left">⚑ 00</div>
-      <button class="head-btn head-btn-accent" data-ref="face" aria-label="Restart this board">🙂</button>
-      <div class="head-card" data-ref="time" aria-label="Time">00:00</div>`;
+      <div class="head-card" data-ref="flags" aria-label="剩余地雷">⚑ 00</div>
+      <button class="head-btn head-btn-accent" data-ref="face" aria-label="重开本局">🙂</button>
+      <div class="head-card" data-ref="time" aria-label="用时">00:00</div>`;
     const q = <T extends HTMLElement>(r: string) => host.querySelector<T>(`[data-ref="${r}"]`)!;
     head = { flags: q('flags'), face: q<HTMLButtonElement>('face'), time: q('time') };
     head.face.addEventListener('click', () => {
@@ -127,11 +127,11 @@ export function createMinesweeper(): Game {
     const won = state.status === 'won';
     const s = elapsed();
     ctx?.overlay({
-      title: won ? 'CLEARED!' : 'BOOM',
+      title: won ? '扫雷成功！' : '踩到雷了！',
       tone: won ? 'win' : 'lose',
-      lines: [DIFF_LABEL[state.diff.id], `TIME ${padScore(Math.floor(s / 60), 2)}:${padScore(s % 60, 2)}`],
-      actions: [{ label: '▶ NEW GAME', onPress: replay }],
-      hints: ['SPACE / TAP TO PLAY AGAIN'],
+      lines: [DIFF_LABEL[state.diff.id], `用时 ${padScore(Math.floor(s / 60), 2)}:${padScore(s % 60, 2)}`],
+      actions: [{ label: '▶ 新游戏', onPress: replay }],
+      hints: ['空格键或点击再玩一次'],
     });
   }
 
@@ -281,12 +281,12 @@ export function createMinesweeper(): Game {
       id: 'minesweeper',
       name: 'Minesweeper',
       icon: '💣',
-      displayName: 'MINES',
-      hints: ['CLICK REVEAL', 'LONG-PRESS / RIGHT-CLICK FLAG'],
+      displayName: '扫雷',
+      hints: ['点击翻开', '长按 / 右键插旗'],
       screen: 'paper',
       head: true,
       pausable: false,
-      tools: [{ id: 'menu', label: '☰', aria: 'Difficulty menu' }],
+      tools: [{ id: 'menu', label: '☰', aria: '难度菜单' }],
     },
 
     mount(container: HTMLElement, context: GameContext): void {

@@ -25,7 +25,7 @@ export function cabinetHtml(meta: GameMeta, muted: boolean): string {
   const hintsHtml = hintsBarHtml(meta.hints ?? []);
   const pauseHtml = meta.pausable === false
     ? ''
-    : '<button class="cab-btn" data-act="pause" aria-label="Pause">❚❚</button>';
+    : '<button class="cab-btn" data-act="pause" aria-label="暂停">❚❚</button>';
   const sideHtml = meta.side ? '<div class="cab-side"></div>' : '';
   const headHtml = meta.head ? '<div class="cab-head"></div>' : '';
   const padHtml = meta.pad ? '<div class="cab-pad"></div>' : '';
@@ -33,12 +33,12 @@ export function cabinetHtml(meta: GameMeta, muted: boolean): string {
     .map((t) => `<button class="cab-btn" data-act="tool:${esc(t.id)}" aria-label="${esc(t.aria)}">${esc(t.label)}</button>`)
     .join('');
   // The pill is always rendered, hidden at first, and filled via ctx.setPill — so it never has to be inserted from nowhere
-  const pillHtml = '<span class="cab-pill" aria-label="Current difficulty" hidden></span>';
+  const pillHtml = '<span class="cab-pill" aria-label="当前难度" hidden></span>';
 
   return `
     <div class="cabinet accent-${accentOf(meta.id)}">
       <div class="cab-bar">
-        <button class="cab-btn" data-act="back">◀ BACK</button>
+        <button class="cab-btn" data-act="back">◀ 返回</button>
         <span class="cab-id">
           <!-- pixelIconSvg's output is built only from a whitelist lookup and numbers, never from input text, so it is not escaped -->
           <span class="px px-xs">${pixelIconSvg(meta.id)}</span>
@@ -48,7 +48,7 @@ export function cabinetHtml(meta: GameMeta, muted: boolean): string {
         <span class="cab-tools">
           ${pauseHtml}
           ${toolsHtml}
-          <button class="cab-btn${muted ? ' is-off' : ''}" data-act="mute" aria-pressed="${muted}" aria-label="Sound">SND</button>
+          <button class="cab-btn${muted ? ' is-off' : ''}" data-act="mute" aria-pressed="${muted}" aria-label="声音">声音</button>
         </span>
       </div>
       <div class="cab-screen">
@@ -80,7 +80,7 @@ export function overlayHtml(view: OverlayView): string {
     .join('');
   const quit = view.quit === false
     ? ''
-    : '<button class="settle-quit" data-act="overlay-quit">QUIT TO HUB</button>';
+    : '<button class="settle-quit" data-act="overlay-quit">返回游戏厅</button>';
   return `
     <div class="settle-card">
       <span class="settle-title ${TITLE_CLASS[view.tone]}">${esc(view.title)}</span>

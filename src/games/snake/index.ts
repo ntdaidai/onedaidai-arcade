@@ -78,11 +78,11 @@ export function createSnake(): Game {
       ctx?.audio.play('over');
       const record = state.score > bestAtStart;
       ctx?.overlay({
-        title: record ? 'NEW HIGH SCORE' : 'GAME OVER',
+        title: record ? '新纪录！' : '游戏结束',
         tone: record ? 'record' : 'lose',
-        lines: [`SCORE ${padScore(state.score, 4)}`, `BEST ${padScore(best, 6)}`],
-        actions: [{ label: '▶ RETRY', onPress: retry }],
-        hints: ['SPACE / TAP TO RETRY'],
+        lines: [`得分 ${padScore(state.score, 4)}`, `最高分 ${padScore(best, 6)}`],
+        actions: [{ label: '▶ 再玩一次', onPress: retry }],
+        hints: ['空格键或点击重试'],
       });
     }
   }
@@ -133,8 +133,8 @@ export function createSnake(): Game {
       id: 'snake',
       name: 'Snake',
       icon: '🐍',
-      displayName: 'SNAKE',
-      hints: ['↑↓←→ / WASD MOVE', 'SPACE START'],
+      displayName: '贪吃蛇',
+      hints: ['方向键 / WASD 移动', '空格键开始'],
       screen: 'dark',
     },
 

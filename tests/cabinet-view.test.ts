@@ -111,7 +111,7 @@ describe('overlayHtml', () => {
     expect(html).toContain('data-act="overlay:0"');
     expect(html).toContain('data-act="overlay-quit"');
     expect(html).toContain('>▶ RETRY<');
-    expect(html).toContain('>QUIT TO HUB<');
+    expect(html).toContain('>返回游戏厅<');
   });
 });
 

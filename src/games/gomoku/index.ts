@@ -28,10 +28,10 @@ const PAPER = {
 } as const;
 
 const MODES: { id: 'pvp' | AiLevel['id']; label: string }[] = [
-  { id: 'pvp', label: '2 PLAYERS' },
-  { id: 'easy', label: 'AI EASY' },
-  { id: 'medium', label: 'AI MEDIUM' },
-  { id: 'hard', label: 'AI HARD' },
+  { id: 'pvp', label: '双人对战' },
+  { id: 'easy', label: '电脑 · 简单' },
+  { id: 'medium', label: '电脑 · 普通' },
+  { id: 'hard', label: '电脑 · 困难' },
 ];
 
 /**
@@ -40,9 +40,9 @@ const MODES: { id: 'pvp' | AiLevel['id']; label: string }[] = [
  * game name into an ellipsis. The pill needs one word; overlay buttons keep the full MODES labels.
  */
 const PILL_LABEL: Record<'pvp' | AiLevel['id'], string> = {
-  pvp: 'PVP', easy: 'EASY', medium: 'MEDIUM', hard: 'HARD',
+  pvp: '双人', easy: '简单', medium: '普通', hard: '困难',
 };
-const PLAY_HINTS = ['CLICK TO PLACE', 'FIVE IN A ROW WINS'];
+const PLAY_HINTS = ['点击落子', '连成五子获胜'];
 
 export function createGomoku(): Game {
   let game: L.GomokuState | null = null; // null = not started (mode menu open)
@@ -65,10 +65,10 @@ export function createGomoku(): Game {
 
   function buildHead(host: HTMLElement): void {
     host.innerHTML = `
-      <div class="chip" data-ref="black" aria-label="Black">● BLACK</div>
-      <div class="chip" data-ref="white" aria-label="White">○ WHITE</div>
+      <div class="chip" data-ref="black" aria-label="黑棋">● 黑棋</div>
+      <div class="chip" data-ref="white" aria-label="白棋">○ 白棋</div>
       <span class="chip" data-ref="result" role="status" hidden></span>
-      <button class="head-btn" data-ref="new-game" hidden>▶ NEW GAME</button>`;
+      <button class="head-btn" data-ref="new-game" hidden>▶ 新游戏</button>`;
     const q = (r: string) => host.querySelector<HTMLElement>(`[data-ref="${r}"]`)!;
     const newGame = q('new-game') as HTMLButtonElement;
     newGame.addEventListener('click', () => {
@@ -86,8 +86,8 @@ export function createGomoku(): Game {
     const ai = mode !== 'pvp';
     if (ai !== shownAi) {
       shownAi = ai;
-      head.black.textContent = ai ? '● YOU' : '● BLACK';
-      head.white.textContent = ai ? '○ CPU' : '○ WHITE';
+      head.black.textContent = ai ? '● 你' : '● 黑棋';
+      head.white.textContent = ai ? '○ 电脑' : '○ 白棋';
     }
     const turn = game.turn;
     const ended = game.status !== 'playing';
@@ -184,21 +184,21 @@ export function createGomoku(): Game {
     const resumable = game !== null && game.status === 'playing';
     const reviewable = game !== null && game.status !== 'playing';
     ctx?.overlay({
-      title: 'GOMOKU',
+      title: '五子棋',
       tone: 'win',
       lines: [],
       actions: [
         ...(resumable
-          ? [{ label: '✕ RESUME', kind: 'secondary' as const, onPress: () => ctx?.overlay(null) }]
+          ? [{ label: '✕ 继续游戏', kind: 'secondary' as const, onPress: () => ctx?.overlay(null) }]
           : []),
         ...(reviewable
-          ? [{ label: 'VIEW BOARD', kind: 'secondary' as const, onPress: viewBoard }]
+          ? [{ label: '查看棋盘', kind: 'secondary' as const, onPress: viewBoard }]
           : []),
         ...MODES.map((m) => ({
           label: m.label, kind: 'secondary' as const, onPress: () => startGame(m.id),
         })),
       ],
-      hints: [resumable ? 'RESUME OR PICK A MODE' : reviewable ? 'VIEW BOARD OR PICK A MODE' : 'PICK A MODE TO BEGIN'],
+      hints: [resumable ? '继续游戏或选择模式' : reviewable ? '查看棋盘或选择模式' : '选择模式开始游戏'],
     });
   }
 
@@ -219,9 +219,9 @@ export function createGomoku(): Game {
   }
 
   function resultTitle(): string {
-    if (!game || game.status === 'draw') return 'DRAW';
-    if (mode !== 'pvp') return game.winner === L.BLACK ? 'YOU WIN' : 'CPU WINS';
-    return game.winner === L.BLACK ? 'BLACK WINS' : 'WHITE WINS';
+    if (!game || game.status === 'draw') return '平局';
+    if (mode !== 'pvp') return game.winner === L.BLACK ? '你赢了！' : '电脑获胜';
+    return game.winner === L.BLACK ? '黑棋获胜' : '白棋获胜';
   }
 
   function reportEnd(): void {
@@ -230,17 +230,17 @@ export function createGomoku(): Game {
     const draw = game.status === 'draw';
     const humanWon = mode === 'pvp' || game.winner === L.BLACK;
     ctx?.setHints(draw
-      ? ['FINAL BOARD', 'RING: LAST MOVE']
-      : ['FINAL BOARD', 'RING: LAST MOVE', 'LINE: WINNING ROW']);
+      ? ['最终棋盘', '圆圈标记最后一手']
+      : ['最终棋盘', '圆圈标记最后一手', '线条标记获胜五子']);
     ctx?.overlay({
       title: resultTitle(),
       tone: draw ? 'win' : humanWon ? 'win' : 'lose',
       lines: [MODES.find((m) => m.id === mode)!.label],
       actions: [
-        { label: 'VIEW BOARD', onPress: viewBoard },
-        { label: '▶ NEW GAME', kind: 'secondary', onPress: showMenu },
+        { label: '查看棋盘', onPress: viewBoard },
+        { label: '▶ 新游戏', kind: 'secondary', onPress: showMenu },
       ],
-      hints: ['SPACE / TAP TO VIEW BOARD'],
+      hints: ['空格键或点击查看棋盘'],
     });
   }
 
@@ -392,7 +392,7 @@ export function createGomoku(): Game {
       id: 'gomoku',
       name: 'Gomoku',
       icon: '⚫',
-      displayName: 'GOMOKU',
+      displayName: '五子棋',
       hints: PLAY_HINTS,
       screen: 'paper',
       head: true,
@@ -400,7 +400,7 @@ export function createGomoku(): Game {
       // ☰ (as in MINES/SUDOKU) rather than "↺ NEW": this button opens the mode menu, it doesn't
       // restart directly; and "↺ NEW" + the long name GOMOKU + the mode pill wrapped the top bar
       // (NEW on two lines, GOMOKU truncated). A single-character button frees exactly enough room.
-      tools: [{ id: 'menu', label: '☰', aria: 'Mode menu' }],
+      tools: [{ id: 'menu', label: '☰', aria: '模式菜单' }],
     },
 
     mount(container: HTMLElement, context: GameContext): void {

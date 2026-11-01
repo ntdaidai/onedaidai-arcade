@@ -16,12 +16,12 @@ export function difficultyMenu<D extends { id: 'easy' | 'medium' | 'hard' }>(opt
   const open = (): void => {
     const resumable = opts.resumable();
     opts.ctx.overlay({
-      title: 'DIFFICULTY', // one word: the card is barely narrower than the board, two words would wrap and cover the whole screen
+      title: '选择难度',
       tone: 'win',
       lines: [],
       actions: [
         ...(resumable
-          ? [{ label: '✕ RESUME', kind: 'secondary' as const, onPress: () => opts.ctx.overlay(null) }]
+          ? [{ label: '✕ 继续游戏', kind: 'secondary' as const, onPress: () => opts.ctx.overlay(null) }]
           : []),
         ...opts.difficulties.map((d) => ({
           label: DIFF_LABEL[d.id],
@@ -29,7 +29,7 @@ export function difficultyMenu<D extends { id: 'easy' | 'medium' | 'hard' }>(opt
           onPress: () => opts.onPick(d),
         })),
       ],
-      hints: [resumable ? 'RESUME OR PICK A DIFFICULTY' : 'PICK A DIFFICULTY TO BEGIN'],
+      hints: [resumable ? '继续游戏或选择难度' : '选择难度开始游戏'],
     });
   };
   return { open };

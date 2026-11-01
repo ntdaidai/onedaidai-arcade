@@ -56,9 +56,9 @@ export function createG2048(): Game {
 
   function buildHead(host: HTMLElement): void {
     host.innerHTML = `
-      <div class="head-card"><span class="head-label">SCORE</span><span data-ref="score">000000</span></div>
-      <div class="head-card"><span class="head-label">BEST</span><span data-ref="best">000000</span></div>
-      <button class="head-btn" data-ref="undo" aria-label="Undo">↩ UNDO</button>`;
+      <div class="head-card"><span class="head-label">得分</span><span data-ref="score">000000</span></div>
+      <div class="head-card"><span class="head-label">最高分</span><span data-ref="best">000000</span></div>
+      <button class="head-btn" data-ref="undo" aria-label="撤销">↩ 撤销</button>`;
     const q = <T extends HTMLElement>(r: string) => host.querySelector<T>(`[data-ref="${r}"]`)!;
     head = { score: q('score'), best: q('best'), undo: q<HTMLButtonElement>('undo') };
     head.undo.addEventListener('click', () => {
@@ -105,12 +105,12 @@ export function createG2048(): Game {
     const record = state.score > bestAtStart;
     if (state.status === 'won') {
       ctx?.overlay({
-        title: '2048!',
+        title: '达成 2048！',
         tone: 'win',
-        lines: [`SCORE ${padScore(state.score, 6)}`, `BEST ${padScore(best, 6)}`],
+        lines: [`得分 ${padScore(state.score, 6)}`, `最高分 ${padScore(best, 6)}`],
         actions: [
           {
-            label: '▶ KEEP GOING',
+            label: '▶ 继续挑战',
             onPress: () => {
               // logic.ts' move() refuses to move unless status is 'playing'; dismissing the
               // overlay isn't enough — the status must be switched back or the board is stuck.
@@ -118,18 +118,18 @@ export function createG2048(): Game {
               ctx?.overlay(null);
             },
           },
-          { label: '↺ NEW GAME', kind: 'secondary', onPress: newGame },
+          { label: '↺ 新游戏', kind: 'secondary', onPress: newGame },
         ],
-        hints: ['KEEP GOING OR START OVER'],
+        hints: ['继续挑战或重新开始'],
       });
       return;
     }
     ctx?.overlay({
-      title: record ? 'NEW HIGH SCORE' : 'GAME OVER',
+      title: record ? '新纪录！' : '游戏结束',
       tone: record ? 'record' : 'lose',
-      lines: [`SCORE ${padScore(state.score, 6)}`, `BEST ${padScore(best, 6)}`],
-      actions: [{ label: '▶ NEW GAME', onPress: newGame }],
-      hints: ['SPACE / TAP FOR A NEW GAME'],
+      lines: [`得分 ${padScore(state.score, 6)}`, `最高分 ${padScore(best, 6)}`],
+      actions: [{ label: '▶ 新游戏', onPress: newGame }],
+      hints: ['空格键或点击开始新游戏'],
     });
   }
 
@@ -203,11 +203,11 @@ export function createG2048(): Game {
       name: '2048',
       icon: '🔢',
       displayName: '2048',
-      hints: ['↑↓←→ / SWIPE TO MERGE', 'Z UNDO'],
+      hints: ['方向键 / 滑动合并方块', 'Z 撤销'],
       screen: 'paper',
       head: true,
       pausable: false,
-      tools: [{ id: 'new', label: '↺ NEW', aria: 'New game' }],
+      tools: [{ id: 'new', label: '↺ 新游戏', aria: '新游戏' }],
     },
 
     mount(container: HTMLElement, context: GameContext): void {

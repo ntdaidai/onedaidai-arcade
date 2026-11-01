@@ -53,7 +53,7 @@ export function createFlappy(): Game {
       if (state.score > best) {
         best = state.score;
         ctx?.storage.set('best.flappy', best);
-        ctx?.setHints([`BEST ${padScore(best, 6)}`]); // mockup 2c shows the live best in the hint bar
+        ctx?.setHints([`最高分 ${padScore(best, 6)}`]); // mockup 2c shows the live best in the hint bar
       }
     }
     if (state.status === 'dead' && !deadHandled) {
@@ -62,11 +62,11 @@ export function createFlappy(): Game {
       ctx?.audio.play('hit');
       const record = state.score > bestAtStart;
       ctx?.overlay({
-        title: record ? 'NEW HIGH SCORE' : 'GAME OVER',
+        title: record ? '新纪录！' : '游戏结束',
         tone: record ? 'record' : 'lose',
-        lines: [`SCORE ${padScore(state.score, 4)}`, `BEST ${padScore(best, 6)}`],
-        actions: [{ label: '▶ RETRY', onPress: retry }],
-        hints: ['SPACE / TAP TO RETRY'],
+        lines: [`得分 ${padScore(state.score, 4)}`, `最高分 ${padScore(best, 6)}`],
+        actions: [{ label: '▶ 再玩一次', onPress: retry }],
+        hints: ['空格键或点击重试'],
       });
     }
   }
@@ -137,7 +137,7 @@ export function createFlappy(): Game {
     if (state.status === 'ready') {
       g.fillStyle = SCREEN.gold;
       g.font = `700 14px ${SCREEN.mono}`;
-      g.fillText('TAP / SPACE TO FLAP', L.W / 2, L.H / 2 + 60);
+      g.fillText('点击或按空格飞翔', L.W / 2, L.H / 2 + 60);
     }
     g.textAlign = 'left';
   }
@@ -147,8 +147,8 @@ export function createFlappy(): Game {
       id: 'flappy',
       name: 'FLAPPY BIRD',
       icon: '🐦',
-      displayName: 'FLAPPY',
-      hints: ['BEST 000000'], // overwritten with the real value by setHints on mount
+      displayName: '飞翔小鸟',
+      hints: ['最高分 000000'], // overwritten with the real value by setHints on mount
       screen: 'dark',
       pausable: false, // mockup 2c's top bar has only SND
     },
@@ -157,7 +157,7 @@ export function createFlappy(): Game {
       ctx = context;
       best = ctx.storage.get('best.flappy', 0);
       bestAtStart = best;
-      ctx.setHints([`BEST ${padScore(best, 6)}`]);
+      ctx.setHints([`最高分 ${padScore(best, 6)}`]);
       ({ canvas, g } = createScreenCanvas(container, L.W, L.H));
 
       ctx.input.onTap(canvas, act);

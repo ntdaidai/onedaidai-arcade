@@ -20,19 +20,19 @@ export interface GameEntry {
 
 export const GAMES: GameEntry[] = [
   {
-    meta: { id: 'snake', name: 'Snake', icon: '🐍', displayName: 'SNAKE' },
+    meta: { id: 'snake', name: 'Snake', icon: '🐍', displayName: '贪吃蛇' },
     load: async () => (await import('./snake')).createSnake(),
   },
   {
-    meta: { id: 'tetris', name: 'Tetris', icon: '🧱', displayName: 'TETRIS' },
+    meta: { id: 'tetris', name: 'Tetris', icon: '🧱', displayName: '俄罗斯方块' },
     load: async () => (await import('./tetris')).createTetris(),
   },
   {
-    meta: { id: 'breakout', name: 'Breakout', icon: '🕹️', displayName: 'BREAKOUT' },
+    meta: { id: 'breakout', name: 'Breakout', icon: '🕹️', displayName: '打砖块' },
     load: async () => (await import('./breakout')).createBreakout(),
   },
   {
-    meta: { id: 'flappy', name: 'FLAPPY BIRD', icon: '🐦', displayName: 'FLAPPY' },
+    meta: { id: 'flappy', name: 'FLAPPY BIRD', icon: '🐦', displayName: '飞翔小鸟' },
     load: async () => (await import('./flappy')).createFlappy(),
   },
   {
@@ -40,15 +40,15 @@ export const GAMES: GameEntry[] = [
     load: async () => (await import('./g2048')).createG2048(),
   },
   {
-    meta: { id: 'minesweeper', name: 'Minesweeper', icon: '💣', displayName: 'MINES' },
+    meta: { id: 'minesweeper', name: 'Minesweeper', icon: '💣', displayName: '扫雷' },
     load: async () => (await import('./minesweeper')).createMinesweeper(),
   },
   {
-    meta: { id: 'sudoku', name: 'Sudoku', icon: '✏️', displayName: 'SUDOKU' },
+    meta: { id: 'sudoku', name: 'Sudoku', icon: '✏️', displayName: '数独' },
     load: async () => (await import('./sudoku')).createSudoku(),
   },
   {
-    meta: { id: 'gomoku', name: 'Gomoku', icon: '⚫', displayName: 'GOMOKU' },
+    meta: { id: 'gomoku', name: 'Gomoku', icon: '⚫', displayName: '五子棋' },
     load: async () => (await import('./gomoku')).createGomoku(),
   },
 ];

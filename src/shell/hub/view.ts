@@ -4,7 +4,7 @@ import { esc } from '../escape';
 
 
 function dailyBody(prefix: string, name: string, suffix: string): string {
-  return [esc(prefix), `<b>${esc(name)}</b>`, esc(suffix)].filter(Boolean).join(' ');
+  return [esc(prefix), `<b>${esc(name)}</b>`, esc(suffix)].filter(Boolean).join('');
 }
 
 export function hubHtml(m: HubModel): string {
@@ -25,8 +25,8 @@ export function hubHtml(m: HubModel): string {
     <div class="hub">
       <header class="marquee">
         <div class="marquee-bar marquee-bar-top"></div>
-        <h1 class="hub-title">DAIDAI ARCADE</h1>
-        <p class="hub-sub">8 GAMES · ONE MORE ROUND</p>
+        <h1 class="hub-title">呆呆游戏厅</h1>
+        <p class="hub-sub">8 款小游戏 · 再玩一局</p>
         <div class="marquee-bar marquee-bar-bottom"></div>
       </header>
 
@@ -45,25 +45,24 @@ export function hubHtml(m: HubModel): string {
           <div class="panel daily">
             <span class="panel-label daily-label">${esc(m.daily.dateLabel)}</span>
             <span class="daily-body">${dailyBody(m.daily.prefix, m.daily.name, m.daily.suffix)}</span>
-            <span class="daily-hint">DAILY PICK → BRAGGING RIGHTS ONLY</span>
-            <button class="btn-accept" data-goto="${esc(m.daily.id)}">ACCEPT ▸</button>
+            <span class="daily-hint">每日推荐 · 轻松挑战</span>
+            <button class="btn-accept" data-goto="${esc(m.daily.id)}">开始挑战 ▸</button>
           </div>
 
           <div class="panel hall">
-            <span class="panel-label hall-label">HALL OF FAME</span>${hall}
-            <span class="hall-note">TOP SCORES ACROSS ALL GAMES</span>
+            <span class="panel-label hall-label">排行榜</span>${hall}
+            <span class="hall-note">本机保存的游戏最高分</span>
           </div>
         </div>
       </section>
 
-      <h2 class="grid-heading">◆ SELECT YOUR CABINET ◆</h2>
+      <h2 class="grid-heading">◆ 选一款开始玩 ◆</h2>
       <div class="hub-grid">${cards}</div>
       <p class="hub-footer">
         <span>${esc(m.footer.games)}</span><span class="cab-dot">·</span>
-        <button class="hub-toggle" data-act="sound" aria-pressed="${m.footer.muted}">SOUND ${m.footer.muted ? 'OFF' : 'ON'}</button><span class="cab-dot">·</span>
+        <button class="hub-toggle" data-act="sound" aria-pressed="${m.footer.muted}">声音${m.footer.muted ? '关' : '开'}</button><span class="cab-dot">·</span>
         <span>${esc(m.footer.copyright)}</span><span class="cab-dot">·</span>
-        <a class="hub-link" href="${esc(m.footer.repoUrl)}" target="_blank" rel="noopener">SOURCE ON GITHUB ↗</a>
+        <a class="hub-link" href="${esc(m.footer.repoUrl)}" target="_blank" rel="noopener">GitHub 源码 ↗</a>
       </p>
     </div>`;
 }
-

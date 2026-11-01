@@ -6,20 +6,20 @@ import type { HubModel } from '../src/shell/hub/model';
 function model(patch: Partial<HubModel> = {}): HubModel {
   return {
     featured: {
-      mode: 'continue', label: '◆ CONTINUE PLAYING ◆', button: 'PRESS START',
-      id: 'tetris', name: 'TETRIS', accent: 'magenta', meta: 'YOUR BEST 012750 · LAST PLAYED 2H AGO',
+      mode: 'continue', label: '◆ 接着玩 ◆', button: '继续游戏',
+      id: 'tetris', name: '俄罗斯方块', accent: 'magenta', meta: '你的最高分 012750 · 上次游玩：2 小时前',
     },
-    daily: { dateLabel: 'DAILY CHALLENGE · SAT 05', prefix: 'CLEAR', name: 'MINES', suffix: 'IN UNDER 60 SECONDS', id: 'minesweeper' },
+    daily: { dateLabel: '今日推荐 · 9月5日 周六', prefix: '挑战', name: '扫雷', suffix: '：60 秒内完成', id: 'minesweeper' },
     hall: [
-      { rank: '1', name: 'TETRIS', score: '012750', tone: 'gold' },
-      { rank: '2', name: 'SNAKE', score: '003840', tone: 'dim' },
-      { rank: '3', name: '— EMPTY —', score: '······', tone: 'faint' },
+      { rank: '1', name: '俄罗斯方块', score: '012750', tone: 'gold' },
+      { rank: '2', name: '贪吃蛇', score: '003840', tone: 'dim' },
+      { rank: '3', name: '— 暂无记录 —', score: '······', tone: 'faint' },
     ],
     cards: [
-      { id: 'snake', name: 'SNAKE', accent: 'teal', pill: 'BEST 003840', hasRecord: true },
-      { id: 'tetris', name: 'TETRIS', accent: 'magenta', pill: 'NO RECORD', hasRecord: false },
+      { id: 'snake', name: '贪吃蛇', accent: 'teal', pill: '最高分 003840', hasRecord: true },
+      { id: 'tetris', name: '俄罗斯方块', accent: 'magenta', pill: '暂无记录', hasRecord: false },
     ],
-    footer: { games: '8 GAMES LOADED', muted: false, copyright: '© 2026 SUNSET ARCADE', repoUrl: 'https://example.com/repo' },
+    footer: { games: '8 款游戏已就绪', muted: false, copyright: '© 2026 呆呆游戏厅', repoUrl: 'https://example.com/repo' },
     ...patch,
   };
 }
@@ -70,16 +70,16 @@ describe('accent is passed as a tone class; no hex in the view', () => {
 });
 
 describe('footer', () => {
-  it('SOUND is a toggle button; label and aria-pressed follow muted', () => {
+  it('sound toggle label and aria-pressed follow muted', () => {
     const on = hubHtml(model());
-    expect(on).toMatch(/<button class="hub-toggle" data-act="sound" aria-pressed="false">SOUND ON<\/button>/);
+    expect(on).toMatch(/<button class="hub-toggle" data-act="sound" aria-pressed="false">声音开<\/button>/);
     const off = hubHtml(model({ footer: { games: '', muted: true, copyright: '', repoUrl: '' } }));
-    expect(off).toMatch(/aria-pressed="true">SOUND OFF<\/button>/);
+    expect(off).toMatch(/aria-pressed="true">声音关<\/button>/);
   });
 
   it('links to the repo in a new tab without leaking opener', () => {
     const html = hubHtml(model());
-    expect(html).toMatch(/<a class="hub-link" href="https:\/\/example\.com\/repo" target="_blank" rel="noopener">SOURCE ON GITHUB/);
+    expect(html).toMatch(/<a class="hub-link" href="https:\/\/example\.com\/repo" target="_blank" rel="noopener">GitHub 源码/);
   });
 
   it('toggle and link styles exist in arcade.css', () => {
@@ -108,13 +108,13 @@ describe('escaping', () => {
 describe('daily challenge copy', () => {
   it('no stray space when suffix is empty', () => {
     const html = hubHtml(model({
-      daily: { dateLabel: 'D', prefix: 'CLEAR 10 LINES IN', name: 'TETRIS', suffix: '', id: 'tetris' },
+      daily: { dateLabel: 'D', prefix: '挑战', name: '俄罗斯方块', suffix: '', id: 'tetris' },
     }));
-    expect(html).toContain('CLEAR 10 LINES IN <b>TETRIS</b></span>');
+    expect(html).toContain('挑战<b>俄罗斯方块</b></span>');
   });
 
   it('the game name is wrapped in <b> for highlighting', () => {
-    expect(hubHtml(model())).toContain('CLEAR <b>MINES</b> IN UNDER 60 SECONDS');
+    expect(hubHtml(model())).toContain('挑战<b>扫雷</b>：60 秒内完成');
   });
 
   // The daily card only picks a game and jumps to it: nothing checks whether the target was
@@ -122,7 +122,7 @@ describe('daily challenge copy', () => {
   // The handoff copy promised a hall entry; the hint must describe what actually happens.
   it('the hint does not promise a hall entry', () => {
     const html = hubHtml(model());
-    expect(html).toContain('<span class="daily-hint">DAILY PICK → BRAGGING RIGHTS ONLY</span>');
+    expect(html).toContain('<span class="daily-hint">每日推荐 · 轻松挑战</span>');
     expect(html).not.toMatch(/JOINS THE HALL/);
   });
 });

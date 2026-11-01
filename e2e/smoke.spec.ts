@@ -10,7 +10,7 @@ test('flappy renders a canvas and returns to the hub', async ({ page }) => {
   await page.goto('/');
   await page.click('[data-id="flappy"]');
   await expect(page.locator('canvas')).toBeVisible();
-  await expect(page.locator('.cab-name')).toContainText('FLAPPY');
+  await expect(page.locator('.cab-name')).toContainText('飞翔小鸟');
   await page.click('[data-act="back"]');
   await expect(page.locator('.hub-title')).toBeVisible();
 });
@@ -19,7 +19,7 @@ test('snake renders a canvas and returns to the hub', async ({ page }) => {
   await page.goto('/');
   await page.click('[data-id="snake"]');
   await expect(page.locator('canvas')).toBeVisible();
-  await expect(page.locator('.cab-name')).toContainText('SNAKE');
+  await expect(page.locator('.cab-name')).toContainText('贪吃蛇');
   await page.click('[data-act="back"]');
   await expect(page.locator('.hub-title')).toBeVisible();
 });
@@ -37,7 +37,7 @@ test('breakout renders a canvas and returns to the hub', async ({ page }) => {
   await page.goto('/');
   await page.click('[data-id="breakout"]');
   await expect(page.locator('canvas')).toBeVisible();
-  await expect(page.locator('.cab-name')).toContainText('BREAKOUT');
+  await expect(page.locator('.cab-name')).toContainText('打砖块');
   await page.click('[data-act="back"]');
   await expect(page.locator('.hub-title')).toBeVisible();
 });
@@ -46,7 +46,7 @@ test('minesweeper renders a canvas and returns to the hub', async ({ page }) => 
   await page.goto('/');
   await page.click('[data-id="minesweeper"]');
   await expect(page.locator('canvas')).toBeVisible();
-  await expect(page.locator('.cab-name')).toContainText('MINES');
+  await expect(page.locator('.cab-name')).toContainText('扫雷');
   await page.click('[data-act="back"]');
   await expect(page.locator('.hub-title')).toBeVisible();
 });
@@ -55,7 +55,7 @@ test('tetris renders a canvas and returns to the hub', async ({ page }) => {
   await page.goto('/');
   await page.click('[data-id="tetris"]');
   await expect(page.locator('canvas')).toBeVisible();
-  await expect(page.locator('.cab-name')).toContainText('TETRIS');
+  await expect(page.locator('.cab-name')).toContainText('俄罗斯方块');
   await page.click('[data-act="back"]');
   await expect(page.locator('.hub-title')).toBeVisible();
 });
@@ -64,7 +64,7 @@ test('sudoku renders a canvas and returns to the hub', async ({ page }) => {
   await page.goto('/');
   await page.click('[data-id="sudoku"]');
   await expect(page.locator('canvas')).toBeVisible();
-  await expect(page.locator('.cab-name')).toContainText('SUDOKU');
+  await expect(page.locator('.cab-name')).toContainText('数独');
   await page.click('[data-act="back"]');
   await expect(page.locator('.hub-title')).toBeVisible();
 });
@@ -73,7 +73,7 @@ test('gomoku renders a canvas and returns to the hub', async ({ page }) => {
   await page.goto('/');
   await page.click('[data-id="gomoku"]');
   await expect(page.locator('canvas')).toBeVisible();
-  await expect(page.locator('.cab-name')).toContainText('GOMOKU');
+  await expect(page.locator('.cab-name')).toContainText('五子棋');
   await page.click('[data-act="back"]');
   await expect(page.locator('.hub-title')).toBeVisible();
 });
@@ -93,15 +93,15 @@ test('SNAKE shows the result overlay on death; RETRY dismisses it and restarts',
 
   // Food is random: if the snake happens to eat before hitting the wall, it sets a record and
   // the title becomes NEW HIGH SCORE. Accept both titles — never bake random game content into a test.
-  await expect(page.locator('.settle-title')).toHaveText(/GAME OVER|NEW HIGH SCORE/);
+  await expect(page.locator('.settle-title')).toHaveText(/游戏结束|新纪录！/);
   await expect(page.locator('.screen')).toHaveClass(/is-settled/);
   // The result hints differ from the in-game hints (mockup artboards 1a vs 1b)
-  await expect(page.locator('.cab-hints')).toHaveText('SPACE / TAP TO RETRY');
+  await expect(page.locator('.cab-hints')).toHaveText('空格键或点击重试');
 
   await page.click('[data-act="overlay:0"]');
   await expect(page.locator('.settle-card')).toBeHidden();
   await expect(page.locator('.screen')).not.toHaveClass(/is-settled/);
-  await expect(page.locator('.cab-hints')).toContainText('SPACE START');
+  await expect(page.locator('.cab-hints')).toContainText('空格键开始');
 });
 
 test('QUIT TO HUB on the result overlay returns to the hub', async ({ page }) => {
@@ -131,7 +131,7 @@ test('FLAPPY has no pause button and shows the live best in the hint bar', async
   await expect(page.locator('canvas')).toBeVisible();
   await expect(page.locator('[data-act="pause"]')).toHaveCount(0);
   await expect(page.locator('[data-act="mute"]')).toHaveCount(1);
-  await expect(page.locator('.cab-hints')).toContainText('BEST');
+  await expect(page.locator('.cab-hints')).toContainText('最高分');
 });
 
 test('the hint bar restores the game\'s text after result → dismiss', async ({ page }) => {
@@ -145,16 +145,16 @@ test('the hint bar restores the game\'s text after result → dismiss', async ({
   await page.evaluate(() => localStorage.setItem('arcade.best.flappy', '42'));
   await page.goto('/#/flappy');
   await expect(page.locator('canvas')).toBeVisible();
-  await expect(page.locator('.cab-hints')).toHaveText('BEST 000042');
+  await expect(page.locator('.cab-hints')).toHaveText('最高分 000042');
 
   // FLAPPY runs no physics while ready: flap once to start, then do nothing and gravity brings the bird down
   await page.keyboard.press('Space');
   await expect(page.locator('.settle-card')).toBeVisible({ timeout: 20000 });
-  await expect(page.locator('.cab-hints')).toHaveText('SPACE / TAP TO RETRY');
+  await expect(page.locator('.cab-hints')).toHaveText('空格键或点击重试');
 
   await page.click('[data-act="overlay:0"]');
   await expect(page.locator('.settle-card')).toBeHidden();
-  await expect(page.locator('.cab-hints')).toHaveText('BEST 000042');
+  await expect(page.locator('.cab-hints')).toHaveText('最高分 000042');
 });
 
 test('SUDOKU opens with the difficulty menu; the digit pad appears after picking', async ({ page }) => {
@@ -162,19 +162,19 @@ test('SUDOKU opens with the difficulty menu; the digit pad appears after picking
   await expect(page.locator('canvas')).toBeVisible();
 
   // The difficulty menu is a multi-action overlay
-  await expect(page.locator('.settle-title')).toHaveText('DIFFICULTY');
+  await expect(page.locator('.settle-title')).toHaveText('选择难度');
   await expect(page.locator('.settle-actions .settle-action')).toHaveCount(3);
   await expect(page.locator('[data-act="pause"]')).toHaveCount(0);
 
   await page.click('[data-act="overlay:0"]');
   await expect(page.locator('.settle-card')).toBeHidden();
-  await expect(page.locator('.cab-pill')).toHaveText('EASY');
+  await expect(page.locator('.cab-pill')).toHaveText('简单');
   await expect(page.locator('.pad-btn-digit')).toHaveCount(9);
   await expect(page.locator('.pad-btn-wide')).toHaveCount(3);
 
   // ☰ reopens the menu
   await page.click('[data-act="tool:menu"]');
-  await expect(page.locator('.settle-title')).toHaveText('DIFFICULTY');
+  await expect(page.locator('.settle-title')).toHaveText('选择难度');
 });
 
 test('SUDOKU notes toggle shares one state between keyboard and button', async ({ page }) => {
@@ -202,9 +202,9 @@ test('SUDOKU freezes the board while the menu is open; RESUME returns to the cur
 
   // Hitting ☰ mid-game: a game in progress needs a way back, not only abandonment
   await page.click('[data-act="tool:menu"]');
-  await expect(page.locator('.settle-title')).toHaveText('DIFFICULTY');
-  await expect(page.locator('.settle-actions .settle-action').first()).toHaveText('✕ RESUME');
-  await expect(page.locator('.cab-hints')).toHaveText('RESUME OR PICK A DIFFICULTY');
+  await expect(page.locator('.settle-title')).toHaveText('选择难度');
+  await expect(page.locator('.settle-actions .settle-action').first()).toHaveText('✕ 继续游戏');
+  await expect(page.locator('.cab-hints')).toHaveText('继续游戏或选择难度');
 
   // The overlay covers only .screen; the pad sits outside — its buttons are clickable but must not change the covered board
   await page.click('[data-pad="notes"]');
@@ -212,14 +212,14 @@ test('SUDOKU freezes the board while the menu is open; RESUME returns to the cur
 
   await page.click('[data-act="overlay:0"]');           // ✕ RESUME
   await expect(page.locator('.settle-card')).toBeHidden();
-  await expect(page.locator('.cab-pill')).toHaveText('EASY'); // still the same game
+  await expect(page.locator('.cab-pill')).toHaveText('简单'); // still the same game
 });
 
 test('SUDOKU menu has no RESUME before a game starts', async ({ page }) => {
   await page.goto('/#/sudoku');
-  await expect(page.locator('.settle-title')).toHaveText('DIFFICULTY');
+  await expect(page.locator('.settle-title')).toHaveText('选择难度');
   await expect(page.locator('.settle-actions .settle-action')).toHaveCount(3);
-  await expect(page.locator('.cab-hints')).toHaveText('PICK A DIFFICULTY TO BEGIN');
+  await expect(page.locator('.cab-hints')).toHaveText('选择难度开始游戏');
 });
 
 test('2048 score cards and undo live in the DOM', async ({ page }) => {
@@ -240,16 +240,16 @@ test('MINES 🙂 restarts the board; ☰ is what returns to the difficulty menu'
   await page.goto('/#/minesweeper');
   await page.click('[data-act="overlay:0"]');            // pick the first difficulty
   await expect(page.locator('.settle-card')).toBeHidden();
-  await expect(page.locator('.cab-pill')).toHaveText('EASY');
+  await expect(page.locator('.cab-pill')).toHaveText('简单');
 
   // 🙂 restarts the board: no menu, same difficulty
   await page.click('[data-ref="face"]');
   await expect(page.locator('.settle-card')).toBeHidden();
-  await expect(page.locator('.cab-pill')).toHaveText('EASY');
+  await expect(page.locator('.cab-pill')).toHaveText('简单');
 
   // ☰ is what returns to the difficulty menu — the two used to share one hit area
   await page.click('[data-act="tool:menu"]');
-  await expect(page.locator('.settle-title')).toHaveText('DIFFICULTY');
+  await expect(page.locator('.settle-title')).toHaveText('选择难度');
 });
 
 test('MINES clock starts on the first reveal', async ({ page }) => {
@@ -264,19 +264,19 @@ test('MINES clock starts on the first reveal', async ({ page }) => {
 
 test('GOMOKU mode menu has four items; turn chips follow the mode', async ({ page }) => {
   await page.goto('/#/gomoku');
-  await expect(page.locator('.settle-title')).toHaveText('GOMOKU');
+  await expect(page.locator('.settle-title')).toHaveText('五子棋');
   await expect(page.locator('.settle-actions .settle-action')).toHaveCount(4);
 
   await page.click('[data-act="overlay:0"]');            // 2 PLAYERS
-  await expect(page.locator('[data-ref="black"]')).toHaveText('● BLACK');
-  await expect(page.locator('[data-ref="white"]')).toHaveText('○ WHITE');
+  await expect(page.locator('[data-ref="black"]')).toHaveText('● 黑棋');
+  await expect(page.locator('[data-ref="white"]')).toHaveText('○ 白棋');
   await expect(page.locator('[data-ref="black"]')).toHaveClass(/is-turn/);
 
   // With a game in progress the menu gains ✕ RESUME at the top, so AI EASY is index 2, not 1
   await page.click('[data-act="tool:menu"]');
-  await expect(page.locator('.settle-actions .settle-action').first()).toHaveText('✕ RESUME');
+  await expect(page.locator('.settle-actions .settle-action').first()).toHaveText('✕ 继续游戏');
   await page.click('[data-act="overlay:2"]');            // AI EASY
-  await expect(page.locator('[data-ref="white"]')).toHaveText('○ CPU');
+  await expect(page.locator('[data-ref="white"]')).toHaveText('○ 电脑');
 });
 
 // ---- Paper boards: if the result overlay says SPACE / TAP, it has to work ----
@@ -307,11 +307,11 @@ test('SUDOKU: Space after solving returns to the difficulty menu', async ({ page
   const box = (await page.locator('canvas').boundingBox())!;
   await page.mouse.click(box.x + 16, box.y + 16); // cell 0
   await page.keyboard.press('Digit5');
-  await expect(page.locator('.settle-title')).toHaveText('SOLVED!');
+  await expect(page.locator('.settle-title')).toHaveText('完成数独！');
 
   await page.waitForTimeout(450); // 400ms debounce
   await page.keyboard.press('Space');
-  await expect(page.locator('.settle-title')).toHaveText('DIFFICULTY');
+  await expect(page.locator('.settle-title')).toHaveText('选择难度');
 });
 
 test('GOMOKU: Space after a result reveals the final board', async ({ page }) => {
@@ -327,13 +327,13 @@ test('GOMOKU: Space after a result reveals the final board', async ({ page }) =>
     await at(c, 7);
     if (c < 4) await at(c, 8);
   }
-  await expect(page.locator('.settle-title')).toHaveText('BLACK WINS');
+  await expect(page.locator('.settle-title')).toHaveText('黑棋获胜');
 
   await page.waitForTimeout(450);
   await page.keyboard.press('Space');
   await expect(page.locator('.settle-card')).toBeHidden();
-  await expect(page.locator('[data-ref="result"]')).toHaveText('BLACK WINS');
-  await expect(page.locator('.cab-hints')).toContainText('FINAL BOARD');
+  await expect(page.locator('[data-ref="result"]')).toHaveText('黑棋获胜');
+  await expect(page.locator('.cab-hints')).toContainText('最终棋盘');
 });
 
 test('MINES: Space after the game ends restarts at the same difficulty', async ({ page }) => {
@@ -350,12 +350,12 @@ test('MINES: Space after the game ends restarts at the same difficulty', async (
       if (await page.locator('.settle-card').isVisible()) break outer;
     }
   }
-  await expect(page.locator('.settle-title')).toHaveText(/BOOM|CLEARED!/);
+  await expect(page.locator('.settle-title')).toHaveText(/踩到雷了！|扫雷成功！/);
 
   await page.waitForTimeout(450);
   await page.keyboard.press('Space');
   await expect(page.locator('.settle-card')).toBeHidden();
-  await expect(page.locator('.cab-pill')).toHaveText('EASY'); // same difficulty
+  await expect(page.locator('.cab-pill')).toHaveText('简单'); // same difficulty
   await expect(page.locator('[data-ref="time"]')).toHaveText('00:00'); // new game
 });
 
@@ -370,14 +370,14 @@ test('2048: Space after game over starts a new game', async ({ page }) => {
   for (let i = 0; i < 4000; i++) {
     await page.keyboard.press(dirs[i % 4]);
     if (i % 25 === 0 && await settle.isVisible()) {
-      if ((await page.locator('.settle-title').textContent()) === '2048!') {
+      if ((await page.locator('.settle-title').textContent()) === '达成 2048！') {
         await page.click('[data-act="overlay:1"]');
         continue;
       }
       break;
     }
   }
-  await expect(page.locator('.settle-title')).toHaveText(/GAME OVER|NEW HIGH SCORE/);
+  await expect(page.locator('.settle-title')).toHaveText(/游戏结束|新纪录！/);
 
   await page.waitForTimeout(450);
   await page.keyboard.press('Space');
@@ -388,19 +388,18 @@ test('2048: Space after game over starts a new game', async ({ page }) => {
 test('the hub footer SOUND toggle shares state with the in-game SND button', async ({ page }) => {
   await page.goto('/');
   const sound = page.locator('[data-act="sound"]');
-  await expect(sound).toHaveText('SOUND ON');
+  await expect(sound).toHaveText('声音开');
   await sound.click();
-  await expect(sound).toHaveText('SOUND OFF');
+  await expect(sound).toHaveText('声音关');
   await expect(sound).toHaveAttribute('aria-pressed', 'true');
 
   await page.click('[data-id="snake"]');
   await expect(page.locator('[data-act="mute"]')).toHaveClass(/is-off/);
   await page.click('[data-act="back"]');
-  await expect(page.locator('[data-act="sound"]')).toHaveText('SOUND OFF');
+  await expect(page.locator('[data-act="sound"]')).toHaveText('声音关');
 
   // The exit link: points at the repo, new tab, no opener leak
   const link = page.locator('.hub-link');
   await expect(link).toHaveAttribute('href', /github\.com\/ntdaidai\/onedaidai-arcade/);
   await expect(link).toHaveAttribute('rel', 'noopener');
 });
-
